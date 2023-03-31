@@ -6,9 +6,9 @@ function validateBattlefield(field)
     for(let c = 0; c < 10; ++c)
     {
       let sz = {siz : 0};
-      let size = validateSizeOrientation(field, visited, r, c, sz);
+      let orientation = validateSizeAndOrientation(field, visited, r, c, sz);
       
-      if(!size)
+      if(!orientation)
         return false;
       
       if(sz.siz == 4)
@@ -31,7 +31,7 @@ function validateBattlefield(field)
 }
 
 
-function validateSizeOrientation(field, visited, r, c, sz)
+function validateSizeAndOrientation(field, visited, r, c, sz)
 {
   let rowInBounds = r >= 0 && r < 10;
   let colInBounds = c >= 0 && c < 10;
@@ -50,33 +50,33 @@ function validateSizeOrientation(field, visited, r, c, sz)
   
   sz.siz++;
   
-  if(disOriented(field, r+1, c+1))
+  if(inBounds(field, r+1, c+1))
     return false;
-  if(disOriented(field, r-1, c+1))
+  if(inBounds(field, r-1, c+1))
     return false;
-  if(disOriented(field, r+1, c-1))
+  if(inBounds(field, r+1, c-1))
     return false;
-  if(disOriented(field, r-1, c-1))
+  if(inBounds(field, r-1, c-1))
     return false;
   
-  if(disOriented(field,r-1,c) && (disOriented(field, r, c+1) || disOriented(field, r, c-1) ))
+  if(inBounds(field,r-1,c) && (inBounds(field, r, c+1) || inBounds(field, r, c-1) ))
     return false;
-  else if(disOriented(field,r+1,c) && (disOriented(field, r, c+1) || disOriented(field, r, c-1)) )
+  else if(inBounds(field,r+1,c) && (inBounds(field, r, c+1) || inBounds(field, r, c-1)) )
     return false;
-  else if(disOriented(field,r+1,c) || disOriented(field, r-1, c))
-    return validateSizeOrientation(field, visited, r+1, c, sz) || validateSizeOrientation(field, visited, r-1, c, sz);
+  else if(inBounds(field,r+1,c) || inBounds(field, r-1, c))
+    return validateSizeAndOrientation(field, visited, r+1, c, sz) || validateSizeAndOrientation(field, visited, r-1, c, sz);
   
-  if(disOriented(field,r,c+1) && (disOriented(field, r+1, c) || disOriented(field, r-1, c) ))
+  if(inBounds(field,r,c+1) && (inBounds(field, r+1, c) || inBounds(field, r-1, c) ))
     return false;
-  else if(disOriented(field,r,c-1) && (disOriented(field, r+1, c) || disOriented(field, r-1, c) ))
+  else if(inBounds(field,r,c-1) && (inBounds(field, r+1, c) || inBounds(field, r-1, c) ))
     return false;
-  else if(disOriented(field, r, c + 1) || disOriented(field, r, c-1))
-    return validateSizeOrientation(field, visited, r, c+1, sz) || validateSizeOrientation(field, visited, r, c-1, sz);
+  else if(inBounds(field, r, c + 1) || inBounds(field, r, c-1))
+    return validateSizeAndOrientation(field, visited, r, c+1, sz) || validateSizeAndOrientation(field, visited, r, c-1, sz);
   
   return true;
 }
 
-function disOriented(field, r, c)
+function inBounds(field, r, c)
 {
   let rowInBounds = r >= 0 && r < 10;
   let colInBounds = c >= 0 && c < 10;
@@ -86,3 +86,4 @@ function disOriented(field, r, c)
   
   return field[r][c] == 1;
 }
+
